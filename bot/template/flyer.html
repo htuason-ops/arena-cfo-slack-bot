@@ -41,8 +41,7 @@
   .quote-close { font-size:64px; font-weight:800; color:#FF7F60; line-height:0; position:relative; top:34px; left:12px; }
   .name-block { margin-top:auto; }
   .name-text { text-align:right; font-size:54px; font-weight:800; color:#1D1A59; line-height:1.05; letter-spacing:-0.01em; }
-  .divider { height:2px; background:#FF7F60; margin:20px 0 16px; }
-  .email-text { text-align:center; font-size:24px; font-weight:700; color:#1D1A59; }
+  .divider { height:2px; background:#FF7F60; margin:20px 0 0; }
 
   /* Three columns */
   .cols { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0 40px; padding:56px 64px 0; flex:1; }
@@ -64,7 +63,6 @@
 <div class="arena-flyer" id="flyer">
 
   <div class="hdr">
-    <!-- Swap for the real arena-wordmark-navy.png asset before deploying -->
     <img id="wordmark" src="./arena-wordmark-navy.png" alt="Arena" onerror="this.style.display='none'" />
     <div class="hdr-text">
       <div class="line1">Meet Your</div>
@@ -84,7 +82,6 @@
       <div class="name-block">
         <div class="name-text" id="name">Jane Doe</div>
         <div class="divider"></div>
-        <div class="email-text" id="email">jane@arenacfo.com</div>
       </div>
     </div>
   </div>
@@ -126,13 +123,13 @@
     });
   }
 
-  // Headless hook: Puppeteer calls window.__arenaSetProfile({name, email,
-  // quote, photo (data URL), education[], expertise[], field[]}) then waits
-  // briefly for the photo to paint before screenshotting #flyer.
+  // Headless hook: Puppeteer calls window.__arenaSetProfile({name, quote,
+  // photo (data URL), education[], expertise[], field[]}) then waits briefly
+  // for the photo to paint before screenshotting #flyer. (email is
+  // intentionally not displayed on the flyer.)
   window.__arenaSetProfile = function (d) {
     d = d || {};
     document.getElementById("name").textContent = d.name || "";
-    document.getElementById("email").textContent = d.email || "";
     document.getElementById("quote").firstChild.textContent = d.quote || "";
     renderList("education", d.education);
     renderList("expertise", d.expertise);
