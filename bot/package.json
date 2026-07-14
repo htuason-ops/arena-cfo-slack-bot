@@ -1,0 +1,18 @@
+{
+  "name": "arena-cfo-slack-bot",
+  "version": "1.0.0",
+  "description": "Slack channel bot: résumé + headshot in #cfo-profiles -> Arena CFO flyer (PNG+PDF) posted back in-thread.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.0",
+    "@slack/bolt": "^3.19.0",
+    "@sparticuz/chromium": "^123.0.1",
+    "dotenv": "^16.4.5",
+    "jspdf": "^2.5.1",
+    "pdf-parse": "^1.1.1",
+    "puppeteer-core": "^22.13.0"
+  }
+}
