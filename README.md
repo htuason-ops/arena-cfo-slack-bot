@@ -16,6 +16,7 @@ bot/render.js           — Puppeteer: loads the flyer, injects data, screenshot
                           wraps that PNG in a one-page PDF
 bot/package.json        — dependencies
 bot/.env.example        — required environment variables
+bot/puppeteer.config.cjs — fixes a "Could not find Chrome" error on Render (see below)
 ```
 
 **A note on the flyer template:** the original `MeetYourCfo.dc.html` reference uses a
@@ -41,6 +42,26 @@ below.
    deploying — model IDs are versioned and this default may drift out of date.
 4. Follow the setup guide (separate doc) to create the Slack app, get tokens, and host
    this service.
+
+## Fixing "Could not find Chrome" on Render
+
+If the bot posts back an error like `Could not find Chrome (ver. ...)`, this is a
+known Puppeteer-on-Render issue: by default Puppeteer downloads Chrome to
+`~/.cache/puppeteer` during the build step, but Render doesn't carry that
+directory over from build to the running app.
+
+**Fix (already included):** `bot/puppeteer.config.cjs` redirects Puppeteer's
+cache into the project directory itself, which *does* persist between build and
+runtime on Render. To pick this up:
+
+1. Make sure `bot/puppeteer.config.cjs` is committed to your repo (it's in this
+   package already).
+2. In the Render dashboard, use **Manual Deploy → Clear build cache & deploy**
+   (not just a regular redeploy) so `npm install` re-downloads Chrome into the
+   new cache path.
+3. Re-test by posting a résumé + headshot again.
+
+Sources: [Puppeteer configuration guide — "Changing the default cache directory"](https://pptr.dev/guides/configuration), [Render community: "Puppeteer fails to find Chromium on Render"](https://community.render.com/t/puppeteer-fails-to-find-chromium-on-render/9920).
 
 ## Known gaps vs. the full design spec
 
