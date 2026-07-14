@@ -1,12 +1,16 @@
 // Renders the Arena "Meet Your CFO" flyer headlessly (Puppeteer) and
 // returns { png, pdf } buffers, using the same template that a human
-// would fill out in the browser (../template/flyer.html), driven by the
-// window.__arenaSetProfile(data) hook exposed in that file.
+// would fill out in the browser (./template/flyer.html, right next to this
+// file), driven by the window.__arenaSetProfile(data) hook exposed in that
+// file.
 //
-// FLYER_URL can point at:
-//   a) a file:// path to template/flyer.html (simplest — same box/server), or
-//   b) a hosted URL if you deploy the template as a static site instead.
+// The template lives inside this bot/ folder (not a sibling directory) so
+// the path is correct no matter how the repo is checked out or which
+// directory a host treats as its "root" — no dependency on FLYER_URL being
+// set correctly. FLYER_URL remains available as an override if you'd rather
+// point at a hosted copy of the template instead.
 
+const path = require('path');
 const puppeteer = require('puppeteer');
 const { jsPDF } = require('jspdf');
 
@@ -16,8 +20,8 @@ async function renderFlyerFiles(data, photoBuf, photoMimetype) {
     const page = await browser.newPage();
     await page.setViewport({ width: 1080, height: 1440, deviceScaleFactor: 2 });
 
-    const flyerUrl = process.env.FLYER_URL;
-    if (!flyerUrl) throw new Error('FLYER_URL env var is not set (point it at template/flyer.html)');
+    const defaultFlyerUrl = 'file://' + path.join(__dirname, 'template', 'flyer.html');
+    const flyerUrl = process.env.FLYER_URL || defaultFlyerUrl;
     await page.goto(flyerUrl, { waitUntil: 'networkidle0' });
 
     const photoDataUrl = photoBuf

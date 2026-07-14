@@ -7,7 +7,9 @@
 // thread.
 //
 // Required env vars (see .env.example):
-//   SLACK_BOT_TOKEN, SLACK_SIGNING_SECRET, ANTHROPIC_API_KEY, FLYER_URL
+//   SLACK_BOT_TOKEN, SLACK_SIGNING_SECRET, ANTHROPIC_API_KEY
+// (FLYER_URL is optional — it defaults to the template shipped in this
+// bot/template folder; only set it if you're pointing at a hosted copy.)
 //
 // This is adapted from the reference implementation in
 // design_references/SLACK-AUTOMATION.md (Option A), hardened with basic
@@ -19,7 +21,7 @@ const pdfParse = require('pdf-parse');
 const Anthropic = require('@anthropic-ai/sdk');
 const { renderFlyerFiles } = require('./render');
 
-const REQUIRED_ENV = ['SLACK_BOT_TOKEN', 'SLACK_SIGNING_SECRET', 'ANTHROPIC_API_KEY', 'FLYER_URL'];
+const REQUIRED_ENV = ['SLACK_BOT_TOKEN', 'SLACK_SIGNING_SECRET', 'ANTHROPIC_API_KEY'];
 for (const key of REQUIRED_ENV) {
   if (!process.env[key]) {
     console.error(`Missing required env var: ${key}. See .env.example.`);
